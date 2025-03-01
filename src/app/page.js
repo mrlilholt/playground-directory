@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 export default function Home() {
@@ -30,35 +30,55 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="text-3xl font-bold text-center mb-6">Playground Directory</h1>
+    <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white p-6">
+      <h1 className="text-4xl font-extrabold text-center text-blue-700 mb-6">Find Your Perfect Playground</h1>
 
       {/* Search Bar */}
-      <div className="flex justify-center mb-6">
+      <div className="flex justify-center mb-8">
         <input
           type="text"
           placeholder="Enter ZIP Code"
           value={searchZip}
           onChange={(e) => setSearchZip(e.target.value)}
-          className="px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-4 py-2 w-64 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <button
           onClick={handleSearch}
-          className="ml-2 px-4 py-2 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700"
+          className="ml-2 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition-transform transform hover:scale-105"
         >
           Search
         </button>
       </div>
 
       {/* Playground Results */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {filteredPlaygrounds.length > 0 ? (
           filteredPlaygrounds.map(playground => (
-            <div key={playground.id} className="bg-white p-4 shadow rounded">
-              <img src={playground.image} alt={playground.name} className="w-full h-40 object-cover rounded" />
-              <h2 className="text-xl font-semibold mt-2">{playground.name}</h2>
+            <div
+              key={playground.id}
+              className="bg-white p-5 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl"
+            >
+              <img
+                src={playground.image}
+                alt={playground.name}
+                className="w-full h-48 object-cover rounded-md"
+              />
+              <h2 className="text-2xl font-bold mt-4 text-blue-800">{playground.name}</h2>
               <p className="text-gray-600">{playground.location}</p>
               <p className="text-sm text-gray-500">ZIP: {playground.zip}</p>
+
+              {/* Features Tags */}
+<div className="flex flex-wrap mt-3">
+  {(Array.isArray(playground.features) ? playground.features : []).map((feature, index) => (
+    <span
+      key={index}
+      className="bg-blue-200 text-blue-800 text-xs font-semibold mr-2 px-3 py-1 rounded-full"
+    >
+      {feature}
+    </span>
+  ))}
+</div>
+
             </div>
           ))
         ) : (
